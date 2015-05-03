@@ -1,0 +1,16 @@
+giftfriatervinning.info | http://www.sakab.se/templates/startpage.aspx?id=69
+www.giftfriatervinning.info | http://www.sakab.se/templates/startpage.aspx?id=69
+giftfriatervinning.se | http://www.sakab.se/templates/startpage.aspx?id=69
+www.giftfriatervinning.se | http://www.sakab.se/templates/startpage.aspx?id=69
+giftfriåtervinning.info | Invalid url (does not exist)
+www.giftfriåtervinning.info | Invalid url (does not exist)
+giftfriåtervinning.se | Invalid url (does not exist)
+www.giftfriåtervinning.se | Invalid url (does not exist)
+sakab.com.ua | http://www.sakab.se/templates/StartPage.aspx?id=572
+www.sakab.com.ua | http://www.sakab.se/templates/StartPage.aspx?id=572
+sakab.no | http://www.sakab.se/templates/StartPage.aspx?id=610
+www.sakab.no | http://www.sakab.se/templates/StartPage.aspx?id=610
+sakabab.se | http://www.sakab.se/templates/StartPage.aspx?id=69
+www.sakabab.se | http://www.sakab.se/templates/StartPage.aspx?id=69
+spilldunken.se | http://www.sakab.se/templates/StartPage.aspx?id=69
+www.spilldunken.se | http://www.sakab.se/templates/StartPage.aspx?id=69
