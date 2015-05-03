@@ -55,6 +55,12 @@
     <Compile Include="Utilities.Tests\Punycode.Tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LinkChecker\LinkChecker.csproj">
+      <Project>{d95e010f-c175-441b-98c9-c0c43a86c5b1}</Project>
+      <Name>LinkChecker</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

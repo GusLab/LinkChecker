@@ -1,6 +1,6 @@
 ﻿namespace LinkChecker.Utilities
 {
-    public class Utilities
+    public class DomainConverter
     {
         /// <summary>
         ///   Converts the domain name to IDN (punicode encoded)
@@ -10,7 +10,7 @@
         public static string ToIdn(string aDomain)
         {
 
-            var parts = aDomain.Split('.');
+          /*  var parts = aDomain.Split('.');
             aDomain = "";
             foreach (var partuni in parts)
             {
@@ -25,7 +25,7 @@
                 }
                 aDomain = aDomain + partpuny + ".";
             }
-            aDomain = help.Left(aDomain, aDomain.Length - 1);
+            aDomain = help.Left(aDomain, aDomain.Length - 1);*/
             return aDomain;
         }
     }

@@ -80,7 +80,7 @@ namespace LinkChecker
 
                 listBox1.Items.Clear();
                 listBox2.Items.Clear();
-
+                /*
                 while(reader.EndOfStream == false)
                 {
                     string item = reader.ReadLine();
@@ -90,7 +90,7 @@ namespace LinkChecker
                     {
                         listBox1.Items.Add("www." + item);
                     }
-                }
+                }*/
                 
                 reader.Close();
                 button3.Enabled = true;
