@@ -11,11 +11,6 @@ namespace LinkChecker.Utilities
         const int MaxInputStringLenght = 8000;
         const uint MaxUint = 4294967295;
 
-        Punycode()
-        {
-
-        }
-
         private enum PunyCodeOperationStatus
         {
             PunycodeStatusSuccess,
@@ -36,25 +31,26 @@ namespace LinkChecker.Utilities
             PunycodeBootstringDelimiter = 0x2D 
         };
 
-        static bool IsCharacterBasic(uint inputCharacter) 
+        public bool IsCharacterBasic(uint inputCharacter) 
         {
             return (inputCharacter < (uint)PunyCodeBootstringParams.PunycodeBootstringInitialN);
         }
 
-        static bool IsCharacterDelimiter(uint inputCharacter)
+        public bool IsCharacterDelimiter(uint inputCharacter)
         {
             return (inputCharacter == (uint)PunyCodeBootstringParams.PunycodeBootstringDelimiter);
         }
 
-        static uint GetNumericValueInBasicCode(uint inputCharacter)
+        public uint GetAlphaNumericValueInBasicCode(uint inputCharacter)
         {
             return (inputCharacter - 48 < 10 ? inputCharacter - 22 : inputCharacter - 65 < 26 ? inputCharacter - 65 :
                     inputCharacter - 97 < 26 ? inputCharacter - 97 : (uint)PunyCodeBootstringParams.PunycodeBootstringBase);
         }
 
-        static char GetEncodedToBasicCode(uint inputCharacter, bool isUpperCase)
+        public char GetEncodedBasicCodeToAscii(uint inputCharacter, bool isLowerCase)
         {
-            return (char)(inputCharacter + 22 + 75 * (inputCharacter < 26 ? 1 : 0) - ((isUpperCase != true ? 1 : 0) << 5));
+            if (inputCharacter > 35) return (isLowerCase != true ? 'z' : 'Z');
+            return (char)(inputCharacter + 22 + 75 * (inputCharacter < 26 ? 1 : 0) - ((isLowerCase != true ? 1 : 0) << 5));
             /*  0..25 map to ASCII a..z or A..Z */
             /* 26..35 map to ASCII 0..9         */
         }
@@ -279,11 +275,11 @@ namespace LinkChecker.Utilities
                     var t = k <= bias /* + tmin */ ? (uint)PunyCodeBootstringParams.PunycodeBootstringTmin :     /* +tmin not needed */
                         k >= bias + (uint)PunyCodeBootstringParams.PunycodeBootstringTmax ? (uint)PunyCodeBootstringParams.PunycodeBootstringTmax : k - bias;
                     if (q < t) break;
-                    aOutput[sout++] = (byte)GetEncodedToBasicCode(t + (q - t) % ((uint)PunyCodeBootstringParams.PunycodeBootstringBase - t), false);
+                    aOutput[sout++] = (byte)GetEncodedBasicCodeToAscii(t + (q - t) % ((uint)PunyCodeBootstringParams.PunycodeBootstringBase - t), false);
                     q = (q - t) / ((uint)PunyCodeBootstringParams.PunycodeBootstringBase - t);
                 }
 
-                aOutput[sout++] = (byte)GetEncodedToBasicCode(q, (aCaseFlags != null) && aCaseFlags[(int)j]);
+                aOutput[sout++] = (byte)GetEncodedBasicCodeToAscii(q, (aCaseFlags != null) && aCaseFlags[(int)j]);
                 bias = Adapt(delta, h + 1, h == b);
                 delta = 0;
                 ++h;
@@ -390,7 +386,7 @@ namespace LinkChecker.Utilities
                 uint k;
                 for (oldi = (uint)i, w = 1, k = (uint)PunyCodeBootstringParams.PunycodeBootstringBase;  ;  k += (uint)PunyCodeBootstringParams.PunycodeBootstringBase) {
               if (sin >= aInputLength) return PunyCodeOperationStatus.PunycodeStatusBadInput;
-              var digit = GetNumericValueInBasicCode(aInput[(int)sin++]);
+              var digit = GetAlphaNumericValueInBasicCode(aInput[(int)sin++]);
               if (digit >= (uint)PunyCodeBootstringParams.PunycodeBootstringBase) return PunyCodeOperationStatus.PunycodeStatusBadInput;
               if (digit > (MaxUint - i) / w) return PunyCodeOperationStatus.PunycodeStatusOverflow;
               i += (int)(digit * w);

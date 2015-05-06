@@ -10,9 +10,9 @@ namespace LinkChecker.Tests.Utilities.Tests
         [Test]
         public void IsCharacterBasicReturnsTrue()
         {
-            var privateStaticAccessor = new PrivateType(typeof(Punycode));
+            var punycodeImp = new Punycode();;
 
-            var actualResult = (bool)privateStaticAccessor.InvokeStatic("IsCharacterBasic", 'v');
+            var actualResult = punycodeImp.IsCharacterBasic('v');
             const bool expectedResult = true;
 
             NUnit.Framework.Assert.AreEqual(expectedResult, actualResult);
@@ -21,9 +21,9 @@ namespace LinkChecker.Tests.Utilities.Tests
         [Test]
         public void IsCharacterBasicReturnsFalse()
         {
-            var privateStaticAccessor = new PrivateType(typeof(Punycode));
+            var punycodeImp = new Punycode();
 
-            var actualResult = (bool)privateStaticAccessor.InvokeStatic("IsCharacterBasic", 'ö');
+            var actualResult = punycodeImp.IsCharacterBasic('ö');
             const bool expectedResult = false;
 
             NUnit.Framework.Assert.AreEqual(expectedResult, actualResult);
@@ -32,9 +32,9 @@ namespace LinkChecker.Tests.Utilities.Tests
         [Test]
         public void IsCharacterDelimiterReturnsTrue()
         {
-            var privateStaticAccessor = new PrivateType(typeof(Punycode));
+            var punycodeImp = new Punycode();
 
-            var actualResult = (bool)privateStaticAccessor.InvokeStatic("IsCharacterDelimiter", '-');
+            var actualResult = punycodeImp.IsCharacterBasic('-');
             const bool expectedResult = true;
 
             NUnit.Framework.Assert.AreEqual(expectedResult, actualResult);
@@ -43,75 +43,75 @@ namespace LinkChecker.Tests.Utilities.Tests
         [Test]
         public void IsCharacterDelimiterReturnsFalse()
         {
-            var privateStaticAccessor = new PrivateType(typeof(Punycode));
+            var punycodeImp = new Punycode();
 
-            var actualResult = (bool)privateStaticAccessor.InvokeStatic("IsCharacterDelimiter", '+');
+            var actualResult = punycodeImp.IsCharacterBasic('+');
             const bool expectedResult = false;
 
             NUnit.Framework.Assert.AreEqual(expectedResult, actualResult);
         }
 
         [Test]
-        public void GetNumericValueInBasicCodeReturnsIsBasicCodeAndIsUpperCaseLetterRange()
+        public void GetAlphaNumericValueInBasicCodeReturnsIsBasicCodeAndIsUpperCaseLetterRange()
         {
-            var privateStaticAccessor = new PrivateType(typeof(Punycode));
+            var punycodeImp = new Punycode();
 
-            var actualResult = (uint)privateStaticAccessor.InvokeStatic("GetNumericValueInBasicCode", 'Z');
+            var actualResult = punycodeImp.GetAlphaNumericValueInBasicCode('Z');
             const uint expectedResult = 25;
 
             NUnit.Framework.Assert.AreEqual(expectedResult, actualResult);
         }
 
         [Test]
-        public void GetNumericValueInBasicCodeReturnsIsBasicCodeAndIsLowerCaseLetterRange()
+        public void GetAlphaNumericValueInBasicCodeReturnsIsBasicCodeAndIsLowerCaseLetterRange()
         {
-            var privateStaticAccessor = new PrivateType(typeof(Punycode));
+            var punycodeImp = new Punycode();
 
-            var actualResult = (uint)privateStaticAccessor.InvokeStatic("GetNumericValueInBasicCode", 'z');
+            var actualResult = punycodeImp.GetAlphaNumericValueInBasicCode('z');
             const uint expectedResult = 25;
 
             NUnit.Framework.Assert.AreEqual(expectedResult, actualResult);
         }
 
         [Test]
-        public void GetNumericValueInBasicCodeReturnsIsBasicCodeAndIsNaturalNumberRange()
+        public void GetAlphaNumericValueInBasicCodeReturnsIsBasicCodeAndIsNaturalNumberRange()
         {
-            var privateStaticAccessor = new PrivateType(typeof(Punycode));
+            var punycodeImp = new Punycode();
 
-            var actualResult = (uint)privateStaticAccessor.InvokeStatic("GetNumericValueInBasicCode", '0');
+            var actualResult = punycodeImp.GetAlphaNumericValueInBasicCode('0');
             const uint expectedResult = 26;
 
             NUnit.Framework.Assert.AreEqual(expectedResult, actualResult);
         }
 
         [Test]
-        public void GetNumericValueInBasicCodeReturnsIsNonBasicCodeRange()
+        public void GetAlphaNumericValueInBasicCodeReturnsIsNonBasicCodeRange()
         {
-            var privateStaticAccessor = new PrivateType(typeof(Punycode));
+            var punycodeImp = new Punycode();
 
-            var actualResult = (uint)privateStaticAccessor.InvokeStatic("GetNumericValueInBasicCode", '?');
+            var actualResult = punycodeImp.GetAlphaNumericValueInBasicCode('?');
             const uint expectedResult = 36;
 
             NUnit.Framework.Assert.AreEqual(expectedResult, actualResult);
         }
 
         [Test]
-        public void GetNumericValueInBasicCodeReturnsIsGurkhumiCharacterRange()
+        public void GetAlphaNumericValueInBasicCodeReturnsIsGurkhumiCharacterRange()
         {
-            var privateStaticAccessor = new PrivateType(typeof(Punycode));
+            var punycodeImp = new Punycode();
 
-            var actualResult = (uint)privateStaticAccessor.InvokeStatic("GetNumericValueInBasicCode", 'ਐ');
+            var actualResult = punycodeImp.GetAlphaNumericValueInBasicCode('ਐ');
             const uint expectedResult = 36;
 
             NUnit.Framework.Assert.AreEqual(expectedResult, actualResult);
         }
 
         [Test]
-        public void GetNumericValueInBasicCodeReturnsIsMathematicSymbolCharacterRange()
+        public void GetAlphaNumericValueInBasicCodeReturnsIsMathematicSymbolCharacterRange()
         {
-            var privateStaticAccessor = new PrivateType(typeof(Punycode));
+            var punycodeImp = new Punycode();
 
-            var actualResult = (uint)privateStaticAccessor.InvokeStatic("GetNumericValueInBasicCode", '∈');
+            var actualResult = punycodeImp.GetAlphaNumericValueInBasicCode('∈');
             const uint expectedResult = 36;
 
             NUnit.Framework.Assert.AreEqual(expectedResult, actualResult);
@@ -120,12 +120,45 @@ namespace LinkChecker.Tests.Utilities.Tests
         [Test]
         public void GetEncodedToBasicCodeReturnsIsLowerCaseLetter()
         {
-            var privateStaticAccessor = new PrivateType(typeof(Punycode));
+            var punycodeImp = new Punycode();
 
-            var actualResult = (char)privateStaticAccessor.InvokeStatic("GetEncodedToBasicCode", uint.MaxValue, false);
+            var actualResult = punycodeImp.GetEncodedBasicCodeToAscii((char)2, true);
             const char expectedResult = 'c';
 
-            NUnit.Framework.StringAssert.AreNotEqualIgnoringCase(expectedResult.ToString(), actualResult.ToString());
+            NUnit.Framework.StringAssert.AreEqualIgnoringCase(expectedResult.ToString(), actualResult.ToString());
+        }
+
+        [Test]
+        public void GetEncodedToBasicCodeReturnsIsUpperCaseLetter()
+        {
+            var punycodeImp = new Punycode();
+
+            var actualResult = punycodeImp.GetEncodedBasicCodeToAscii((char)2, false);
+            const char expectedResult = 'C';
+
+            NUnit.Framework.StringAssert.Equals(expectedResult.ToString(), actualResult.ToString());
+        }
+
+        [Test]
+        public void GetEncodedToBasicCodeReturnsIsNumber()
+        {
+            var punycodeImp = new Punycode();
+
+            var actualResult = punycodeImp.GetEncodedBasicCodeToAscii((char)26, false);
+            const char expectedResult = '0';
+
+            NUnit.Framework.StringAssert.Equals(expectedResult.ToString(), actualResult.ToString());
+        }
+
+        [Test]
+        public void GetEncodedToBasicCodeReturnsIsAboveRange()
+        {
+            var punycodeImp = new Punycode();
+
+            var actualResult = punycodeImp.GetEncodedBasicCodeToAscii((char)2226, false);
+            const char expectedResult = 'Z';
+
+            NUnit.Framework.StringAssert.Equals(expectedResult.ToString(), actualResult.ToString());
         }
     }
 }
