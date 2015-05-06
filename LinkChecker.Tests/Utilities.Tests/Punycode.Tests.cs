@@ -34,7 +34,7 @@ namespace LinkChecker.Tests.Utilities.Tests
         {
             var punycodeImp = new Punycode();
 
-            var actualResult = punycodeImp.IsCharacterBasic('-');
+            var actualResult = punycodeImp.IsCharacterDelimiter('-');
             const bool expectedResult = true;
 
             NUnit.Framework.Assert.AreEqual(expectedResult, actualResult);
@@ -45,7 +45,7 @@ namespace LinkChecker.Tests.Utilities.Tests
         {
             var punycodeImp = new Punycode();
 
-            var actualResult = punycodeImp.IsCharacterBasic('+');
+            var actualResult = punycodeImp.IsCharacterDelimiter('+');
             const bool expectedResult = false;
 
             NUnit.Framework.Assert.AreEqual(expectedResult, actualResult);
@@ -125,7 +125,7 @@ namespace LinkChecker.Tests.Utilities.Tests
             var actualResult = punycodeImp.GetEncodedBasicCodeToAscii((char)2, true);
             const char expectedResult = 'c';
 
-            NUnit.Framework.StringAssert.AreEqualIgnoringCase(expectedResult.ToString(), actualResult.ToString());
+            NUnit.Framework.Assert.AreEqual(expectedResult.ToString(), actualResult.ToString());
         }
 
         [Test]
@@ -136,7 +136,7 @@ namespace LinkChecker.Tests.Utilities.Tests
             var actualResult = punycodeImp.GetEncodedBasicCodeToAscii((char)2, false);
             const char expectedResult = 'C';
 
-            NUnit.Framework.StringAssert.Equals(expectedResult.ToString(), actualResult.ToString());
+            NUnit.Framework.Assert.AreEqual(expectedResult.ToString(), actualResult.ToString());
         }
 
         [Test]
@@ -144,10 +144,10 @@ namespace LinkChecker.Tests.Utilities.Tests
         {
             var punycodeImp = new Punycode();
 
-            var actualResult = punycodeImp.GetEncodedBasicCodeToAscii((char)26, false);
+            var actualResult = punycodeImp.GetEncodedBasicCodeToAscii((char)26, true);
             const char expectedResult = '0';
 
-            NUnit.Framework.StringAssert.Equals(expectedResult.ToString(), actualResult.ToString());
+            NUnit.Framework.Assert.AreEqual(expectedResult.ToString(), actualResult.ToString());
         }
 
         [Test]
@@ -158,7 +158,7 @@ namespace LinkChecker.Tests.Utilities.Tests
             var actualResult = punycodeImp.GetEncodedBasicCodeToAscii((char)2226, false);
             const char expectedResult = 'Z';
 
-            NUnit.Framework.StringAssert.Equals(expectedResult.ToString(), actualResult.ToString());
+            NUnit.Framework.Assert.AreEqual(expectedResult.ToString(), actualResult.ToString());
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using System;
+﻿#define Compile
+#undef Compile
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -49,12 +51,14 @@ namespace LinkChecker.Utilities
 
         public char GetEncodedBasicCodeToAscii(uint inputCharacter, bool isLowerCase)
         {
-            if (inputCharacter > 35) return (isLowerCase != true ? 'z' : 'Z');
+            if (inputCharacter > 35) return (isLowerCase != true ? 'Z' : 'z');
+            if (inputCharacter >= 26) isLowerCase = true;
             return (char)(inputCharacter + 22 + 75 * (inputCharacter < 26 ? 1 : 0) - ((isLowerCase != true ? 1 : 0) << 5));
             /*  0..25 map to ASCII a..z or A..Z */
             /* 26..35 map to ASCII 0..9         */
         }
 
+#if Compile
         /// <summary>
         /// flagged(bcp) tests whether a basic code point is flagged
         /// (uppercase).  The behavior is undefined if bcp is not a
@@ -428,7 +432,7 @@ namespace LinkChecker.Utilities
             aOutputLength = sout;
             return PunyCodeOperationStatus.PunycodeStatusSuccess;
         }
-
+#endif
 
     }
 }
