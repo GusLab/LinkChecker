@@ -1,11 +1,6 @@
 ﻿#define Compile
 #undef Compile
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace LinkChecker.Utilities
+namespace PunyCode
 {
     public sealed class Punycode
     {

@@ -6,8 +6,8 @@
     <ProjectGuid>{6C080934-E0A3-46DC-A633-F8D935B6083B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LinkChecker.Tests</RootNamespace>
-    <AssemblyName>LinkChecker.Tests</AssemblyName>
+    <RootNamespace>Punycode.Tests</RootNamespace>
+    <AssemblyName>Punycode.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -52,13 +52,13 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="Utilities.Tests\Punycode.Tests.cs" />
+    <Compile Include="Punycode.Tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\LinkChecker\LinkChecker.csproj">
-      <Project>{d95e010f-c175-441b-98c9-c0c43a86c5b1}</Project>
-      <Name>LinkChecker</Name>
+    <ProjectReference Include="..\PunyCode\PunyCode.csproj">
+      <Project>{8fa55d42-2513-47f3-b2ee-007f706b47b1}</Project>
+      <Name>PunyCode</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>
