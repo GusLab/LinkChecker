@@ -52,7 +52,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="Punycode.Tests.cs" />
+    <Compile Include="PunyCodeBaseCodeHelper.Tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
