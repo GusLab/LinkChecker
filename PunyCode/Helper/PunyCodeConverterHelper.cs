@@ -9,21 +9,7 @@ namespace PunyCode.Helper
 #if Compile
         
 
-        /// <summary>
-        /// encode_basic(bcp,flag) forces a basic code point to lowercase
-        /// if flag is zero, uppercase if flag is nonzero, and returns
-        /// the resulting code point.  The code point is unchanged if it
-        /// is caseless.  The behavior is undefined if bcp is not a basic
-        /// code point.
-        /// </summary>
-        /// <param name="aBcp">input character</param>
-        /// <param name="aFlag">a flag</param>
-        /// <returns>encoded character</returns>
-        static char EncodeBasic(uint aBcp, bool aFlag)
-        {
-          aBcp -= (uint)(((aBcp - 97 < 26) ? 1: 0) << 5);
-          return (char)(aBcp + (((!aFlag && (aBcp - 65 < 26)) ? 1 : 0) << 5));
-        }
+        
 
         /// <summary>
         /// Bias adaptation function
