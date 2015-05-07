@@ -3,8 +3,9 @@
 
 namespace PunyCode.Helper
 {
-    class PunyCodeConverterHelper
+    public class PunyCodeConverterHelper
     {
+        
 #if Compile
         
 

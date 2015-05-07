@@ -41,6 +41,7 @@
   <ItemGroup>
     <Compile Include="Helper\PunyCodeBaseCodeHelper.cs" />
     <Compile Include="Helper\PunyCodeConverterHelper.cs" />
+    <Compile Include="Helper\PunyCodeStatic.cs" />
     <Compile Include="IPunycodeConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
