@@ -202,5 +202,137 @@ namespace Punycode.Tests
 
             Assert.AreEqual(expectedResult, actualResult);
         }
+
+        [Test]
+        public void GetCharToUpperOrLowerCaseLowerToLowerCase()
+        {
+            var punycodeImp = new PunyCode.Helper.PunyCodeBaseCodeHelper();
+
+            var actualResult = punycodeImp.GetCharToUpperOrLowerCase('a',false);
+            const char expectedResult = 'a';
+
+            Assert.AreEqual(expectedResult, actualResult);
+        }
+
+        [Test]
+        public void GetCharToUpperOrLowerCaseLowerToUpperCase()
+        {
+            var punycodeImp = new PunyCode.Helper.PunyCodeBaseCodeHelper();
+
+            var actualResult = punycodeImp.GetCharToUpperOrLowerCase('a', true);
+            const char expectedResult = 'A';
+
+            Assert.AreEqual(expectedResult, actualResult);
+        }
+
+        [Test]
+        public void GetCharToUpperOrLowerCaseUpperToUpperCase()
+        {
+            var punycodeImp = new PunyCode.Helper.PunyCodeBaseCodeHelper();
+
+            var actualResult = punycodeImp.GetCharToUpperOrLowerCase('A', true);
+            const char expectedResult = 'A';
+
+            Assert.AreEqual(expectedResult, actualResult);
+        }
+
+        [Test]
+        public void GetCharToUpperOrLowerCaseUpperToLowerCase()
+        {
+            var punycodeImp = new PunyCode.Helper.PunyCodeBaseCodeHelper();
+
+            var actualResult = punycodeImp.GetCharToUpperOrLowerCase('a', true);
+            const char expectedResult = 'A';
+
+            Assert.AreEqual(expectedResult, actualResult);
+        }
+
+        [Test]
+        public void GetCharToUpperOrLowerCaseNumberToLowerCase()
+        {
+            var punycodeImp = new PunyCode.Helper.PunyCodeBaseCodeHelper();
+
+            var actualResult = punycodeImp.GetCharToUpperOrLowerCase('9', false);
+            const char expectedResult = '9';
+
+            Assert.AreEqual(expectedResult, actualResult);
+        }
+
+        [Test]
+        public void GetCharToUpperOrLowerCaseNumberToUpperCase()
+        {
+            var punycodeImp = new PunyCode.Helper.PunyCodeBaseCodeHelper();
+
+            var actualResult = punycodeImp.GetCharToUpperOrLowerCase('9', true);
+            const char expectedResult = '9';
+
+            Assert.AreEqual(expectedResult, actualResult);
+        }
+
+        [Test]
+        public void GetCharToUpperOrLowerCaseOutOfRangeToUpperCase()
+        {
+            var punycodeImp = new PunyCode.Helper.PunyCodeBaseCodeHelper();
+
+            var actualResult = punycodeImp.GetCharToUpperOrLowerCase('ਐ', true);
+            const char expectedResult = 'ਐ';
+
+            Assert.AreEqual(expectedResult, actualResult);
+        }
+
+        [Test]
+        public void GetCharToUpperOrLowerCaseOutOfRangeToLowerCase()
+        {
+            var punycodeImp = new PunyCode.Helper.PunyCodeBaseCodeHelper();
+
+            var actualResult = punycodeImp.GetCharToUpperOrLowerCase('ਐ', false);
+            const char expectedResult = 'ਐ';
+
+            Assert.AreEqual(expectedResult, actualResult);
+        }
+
+        [Test]
+        public void AdaptSmallFirstDeltaSmallNumpoint()
+        {
+            var punycodeImp = new PunyCode.Helper.PunyCodeBaseCodeHelper();
+
+            var actualResult = punycodeImp.Adapt(10,5,false);
+            const uint expectedResult = 4;
+
+            Assert.AreEqual(expectedResult, actualResult);
+        }
+
+        [Test]
+        public void AdaptBigFirstDeltaSmallNumpoint()
+        {
+            var punycodeImp = new PunyCode.Helper.PunyCodeBaseCodeHelper();
+
+            var actualResult = punycodeImp.Adapt(20000, 5, false);
+            const uint expectedResult = 68;
+
+            Assert.AreEqual(expectedResult, actualResult);
+        }
+
+        [Test]
+        public void AdaptSmallFirstDeltaBigNumpoint()
+        {
+            var punycodeImp = new PunyCode.Helper.PunyCodeBaseCodeHelper();
+
+            var actualResult = punycodeImp.Adapt(10, 50000, false);
+            const uint expectedResult = 4;
+
+            Assert.AreEqual(expectedResult, actualResult);
+        }
+
+        [Test]
+        public void AdaptBigFirstDeltaBigNumpoint()
+        {
+            var punycodeImp = new PunyCode.Helper.PunyCodeBaseCodeHelper();
+
+            var actualResult = punycodeImp.Adapt(20000, 50000, false);
+            const uint expectedResult = 67;
+
+            Assert.AreEqual(expectedResult, actualResult);
+        }
     }
 }

@@ -32,21 +32,33 @@
             return (inputCharacter <= 90);
         }
 
-        /// <summary>
-        /// encode_basic(bcp,flag) forces a basic code point to lowercase
-        /// if flag is zero, uppercase if flag is nonzero, and returns
-        /// the resulting code point.  The code point is unchanged if it
-        /// is caseless.  The behavior is undefined if bcp is not a basic
-        /// code point.
-        /// </summary>
-        /// <param name="aBcp">input character</param>
-        /// <param name="aFlag">a flag</param>
-        /// <returns>encoded character</returns>
-        static char EncodeBasic(uint aBcp, bool aFlag)
+        public char GetCharToUpperOrLowerCase(uint inputCharacter, bool isUpperCase)
         {
-            aBcp -= (uint)(((aBcp - 97 < 26) ? 1 : 0) << 5);
-            return (char)(aBcp + (((!aFlag && (aBcp - 65 < 26)) ? 1 : 0) << 5));
+            inputCharacter -= (uint)(((inputCharacter - 97 < 26) ? 1 : 0) << 5);
+            return (char)(inputCharacter + (((!isUpperCase && (inputCharacter - 65 < 26)) ? 1 : 0) << 5));
         }
+
+        /// <summary>
+        /// Bias adaptation function
+        /// </summary>
+        /// <param name="aDelta"></param>
+        /// <param name="aNumpoints"></param>
+        /// <param name="aFirsttime"></param>
+        public uint Adapt(uint aDelta, uint aNumpoints, bool aFirsttime)
+        {
+            uint k;
+
+            aDelta = aFirsttime ? aDelta / (uint)PunyCodeStatic.PunyCodeBootstringParams.PunycodeBootstringDamp : aDelta >> 1;
+            /* delta >> 1 is a faster way of doing delta / 2 */
+            aDelta += aDelta / aNumpoints;
+
+            for (k = 0; aDelta > (((uint)PunyCodeStatic.PunyCodeBootstringParams.PunycodeBootstringBase - (uint)PunyCodeStatic.PunyCodeBootstringParams.PunycodeBootstringTmin) * (uint)PunyCodeStatic.PunyCodeBootstringParams.PunycodeBootstringTmax) / 2; k += (uint)PunyCodeStatic.PunyCodeBootstringParams.PunycodeBootstringBase)
+            {
+                aDelta /= (uint)PunyCodeStatic.PunyCodeBootstringParams.PunycodeBootstringBase - (uint)PunyCodeStatic.PunyCodeBootstringParams.PunycodeBootstringTmin;
+            }
+
+            return k + ((uint)PunyCodeStatic.PunyCodeBootstringParams.PunycodeBootstringBase - (uint)PunyCodeStatic.PunyCodeBootstringParams.PunycodeBootstringTmin + 1) * aDelta / (aDelta + (uint)PunyCodeStatic.PunyCodeBootstringParams.PunycodeBootstringSkew);
+        }  
 
     }
 }

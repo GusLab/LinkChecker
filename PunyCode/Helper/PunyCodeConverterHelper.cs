@@ -6,32 +6,7 @@ namespace PunyCode.Helper
     public class PunyCodeConverterHelper
     {
         
-#if Compile
-        
-
-        
-
-        /// <summary>
-        /// Bias adaptation function
-        /// </summary>
-        /// <param name="aDelta"></param>
-        /// <param name="aNumpoints"></param>
-        /// <param name="aFirsttime"></param>
-        static uint Adapt(uint aDelta, uint aNumpoints, bool aFirsttime)
-        {
-            uint k;
-
-            aDelta = aFirsttime ? aDelta / (uint)PunyCodeBootstringParams.PunycodeBootstringDamp : aDelta >> 1;
-            /* delta >> 1 is a faster way of doing delta / 2 */
-            aDelta += aDelta / aNumpoints;
-
-            for (k = 0; aDelta > (((uint)PunyCodeBootstringParams.PunycodeBootstringBase - (uint)PunyCodeBootstringParams.PunycodeBootstringTmin) * (uint)PunyCodeBootstringParams.PunycodeBootstringTmax) / 2; k += (uint)PunyCodeBootstringParams.PunycodeBootstringBase)
-            {
-                aDelta /= (uint)PunyCodeBootstringParams.PunycodeBootstringBase - (uint)PunyCodeBootstringParams.PunycodeBootstringTmin;
-            }
-
-            return k + ((uint)PunyCodeBootstringParams.PunycodeBootstringBase - (uint)PunyCodeBootstringParams.PunycodeBootstringTmin + 1) * aDelta / (aDelta + (uint)PunyCodeBootstringParams.PunycodeBootstringSkew);
-        }        
+#if Compile                              
 
         /// <summary>
         /// Encodes Unicode to Punicode (forces unicode on string)
