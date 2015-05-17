@@ -16,13 +16,13 @@ namespace PunyCode
             _disposed = false;
         }
 
-        static public string ForcedUnicodeToPunyCode(string inputString)
+        public string ForcedUnicodeToPunyCode(string inputString)
         {
             var b = Encoding.Unicode.GetBytes(inputString);
             inputString = Encoding.Unicode.GetString(b);
             var outputLenght = (uint)(PunyCodeStatic.MaxInputStringLenght);
             b = new byte[PunyCodeStatic.MaxInputStringLenght];
-            var status = PunycodeEncode((uint)inputString.Length, inputString, null, out outputLenght, out b);
+            var status = _punyCodeConverterHelper.PunycodeEncode((uint)inputString.Length, inputString, null, out outputLenght, out b);
 
             inputString = "";
 
@@ -41,14 +41,14 @@ namespace PunyCode
             return inputString.ToLower();
         }
 
-        public static string ForcedPunyCodeToUnicode(string aInput)
+        public string ForcedPunyCodeToUnicode(string aInput)
         {
             try
             {
                 var b = Encoding.ASCII.GetBytes(aInput);
                 var outputLenght = (uint)(PunyCodeStatic.MaxInputStringLenght);
                 char[] c;
-                var status = PunycodeDecode((uint)aInput.Length, b, out outputLenght, out c, null);
+                var status = _punyCodeConverterHelper.PunycodeDecode((uint)aInput.Length, b, out outputLenght, out c, null);
                 aInput = "";
                 if (status == PunyCodeStatic.PunyCodeOperationStatus.PunycodeStatusSuccess)
                 {
