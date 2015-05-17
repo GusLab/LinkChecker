@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using PunyCode.Helper;
 
 namespace PunyCode
@@ -18,13 +16,8 @@ namespace PunyCode
             _disposed = false;
         }
 
-        /// <summary>
-        /// Encodes Unicode to Punicode (forces unicode on string)
-        /// </summary>
-        /// <param name="inputString">input string</param>
-        static public string Encode(string inputString)
+        static public string ForcedUnicodeToPunyCode(string inputString)
         {
-            // convert to ascii
             var b = Encoding.Unicode.GetBytes(inputString);
             inputString = Encoding.Unicode.GetString(b);
             var outputLenght = (uint)(PunyCodeStatic.MaxInputStringLenght);
@@ -36,7 +29,6 @@ namespace PunyCode
             if (status != PunyCodeStatic.PunyCodeOperationStatus.PunycodeStatusSuccess) return inputString.ToLower();
             for (var i = 0; i < b.Length; i++)
             {
-                //fix numbers
                 if (b[i] >= 16 && b[i] <= 25)
                 {
                     b[i] += 32;
@@ -47,6 +39,28 @@ namespace PunyCode
                 }
             }
             return inputString.ToLower();
+        }
+
+        public static string ForcedPunyCodeToUnicode(string aInput)
+        {
+            try
+            {
+                var b = Encoding.ASCII.GetBytes(aInput);
+                var outputLenght = (uint)(PunyCodeStatic.MaxInputStringLenght);
+                char[] c;
+                var status = PunycodeDecode((uint)aInput.Length, b, out outputLenght, out c, null);
+                aInput = "";
+                if (status == PunyCodeStatic.PunyCodeOperationStatus.PunycodeStatusSuccess)
+                {
+                    aInput = c.Where(t => t != 0).Aggregate(aInput, (current, t) => current + t);
+                }
+            }
+            catch (Exception e)
+            {
+                throw new PunyCodeDecodeException("Decoding from punycode failed for:" + aInput,e);
+            }
+            return aInput.ToLower();
+
         }
 
         public void Dispose()

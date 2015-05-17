@@ -45,6 +45,7 @@
     <Compile Include="IPunycodeConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PunyCodeConverterImpl.cs" />
+    <Compile Include="PunyCodeDecodeException.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Documentation.txt" />

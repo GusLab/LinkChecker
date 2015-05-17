@@ -10,37 +10,6 @@ namespace PunyCode.Helper
         
 #if Compile                              
 
-        
-
-        /// <summary>
-        /// Encodes Punicode to Unicode
-        /// not ready yet
-        /// </summary>
-        /// <param name="aInput">input punycode string</param>
-        public static string Decode(string aInput)
-        {
-            try
-            {
-                var ws = new Punycode();
-
-                // convert to unicode
-                var b = Encoding.ASCII.GetBytes(aInput);
-                var outputLenght = (uint)(MaxInputStringLenght);
-                char[] c;
-                var status = PunycodeDecode((uint)aInput.Length, b, out outputLenght, out c, null);
-                aInput = "";
-                if (status == PunyCodeOperationStatus.PunycodeStatusSuccess)
-                {
-                    aInput = c.Where(t => t != 0).Aggregate(aInput, (current, t) => current + t);
-                }
-            }
-            catch (Exception e)
-            {
-                // ignored
-            }
-            return aInput.ToLower();
-
-        }
 
         /// <summary>
         /// /* PunycodeEncode() converts Unicode to Punycode.  The input     */

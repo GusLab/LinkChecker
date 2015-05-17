@@ -8,7 +8,7 @@ namespace Punycode.Tests
         [Test]
         public void IsCharacterBasicReturnsTrue()
         {
-            var punycodeImp = new PunyCode.Helper.PunyCodeBaseCodeHelper();;
+            var punycodeImp = new PunyCode.Helper.PunyCodeBaseCodeHelper();
 
             var actualResult = punycodeImp.IsCharacterBasic('v');
             const bool expectedResult = true;
