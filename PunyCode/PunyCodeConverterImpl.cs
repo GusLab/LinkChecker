@@ -5,7 +5,7 @@ using PunyCode.Helper;
 
 namespace PunyCode
 {
-    public class PunyCodeConverterImpl : IPunycodeConverter, IDisposable
+    public sealed class PunyCodeConverterImpl : IPunycodeConverter, IDisposable
     {
         private PunyCodeConverterHelper _punyCodeConverterHelper;
         private bool _disposed;
