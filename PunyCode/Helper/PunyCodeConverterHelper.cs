@@ -1,45 +1,16 @@
 ﻿#define Compile
 #undef Compile
 
+using System;
+
 namespace PunyCode.Helper
 {
-    public class PunyCodeConverterHelper
+    public sealed class PunyCodeConverterHelper : IDisposable
     {
         
 #if Compile                              
 
-        /// <summary>
-        /// Encodes Unicode to Punicode (forces unicode on string)
-        /// </summary>
-        /// <param name="aInput">input string</param>
-        static public string Encode(string aInput)
-        {
-            var ws = new Punycode();
-
-            // convert to ascii
-            var b = Encoding.Unicode.GetBytes(aInput);
-            aInput = Encoding.Unicode.GetString(b);
-            var outputLenght = (uint)(MaxInputStringLenght);
-            b = new byte[MaxInputStringLenght];
-            var status = PunycodeEncode((uint)aInput.Length, aInput, null, out outputLenght, out b);
-
-            aInput = "";
-
-            if (status != PunyCodeOperationStatus.PunycodeStatusSuccess) return aInput.ToLower();
-            for (var i = 0; i < b.Length; i++)
-            {
-                //fix numbers
-                if (b[i] >= 16 && b[i] <= 25)
-                {
-                    b[i] += 32;
-                }
-                if (b[i] != 0)
-                {
-                    aInput += (char)b[i];
-                }
-            }
-            return aInput.ToLower();
-        }
+        
 
         /// <summary>
         /// Encodes Punicode to Unicode
@@ -332,5 +303,14 @@ namespace PunyCode.Helper
             return PunyCodeOperationStatus.PunycodeStatusSuccess;
         }
 #endif
+        public void Dispose()
+        {
+            GC.SuppressFinalize(this);
+        }
+
+        ~PunyCodeConverterHelper()
+        {
+            
+        }
     }
 }
