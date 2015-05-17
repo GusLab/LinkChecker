@@ -4,7 +4,7 @@ VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LinkChecker", "LinkChecker\LinkChecker.csproj", "{D95E010F-C175-441B-98C9-C0C43A86C5B1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Punycode.Tests", "LinkChecker.Tests\Punycode.Tests.csproj", "{6C080934-E0A3-46DC-A633-F8D935B6083B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Punycode.Tests", "PunyCode.Tests\Punycode.Tests.csproj", "{6C080934-E0A3-46DC-A633-F8D935B6083B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PunyCode", "PunyCode\PunyCode.csproj", "{8FA55D42-2513-47F3-B2EE-007F706B47B1}"
 EndProject
