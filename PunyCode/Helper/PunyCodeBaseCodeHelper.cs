@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace PunyCode.Helper
 {
@@ -55,6 +57,28 @@ namespace PunyCode.Helper
             return k + ((uint)PunyCodeStatic.PunyCodeBootstringParams.PunycodeBootstringBase - (uint)PunyCodeStatic.PunyCodeBootstringParams.PunycodeBootstringTmin + 1) * delta / (delta + (uint)PunyCodeStatic.PunyCodeBootstringParams.PunycodeBootstringSkew);
         }
 
+        public PunyCodeStatic.PunyCodeOperationStatus AddAllAsciiCharsToOutBytes(
+            string inputString,
+            uint inputLenght,
+            uint maxOut,
+            out uint numberOfOutputBytes,
+            out byte[] outBytes            
+        )
+        {
+            numberOfOutputBytes = 0;
+            outBytes = new byte[PunyCodeStatic.MaxInputStringLenght];
+            var inputStringChars = inputString.ToCharArray();
+
+            foreach (var c in inputStringChars.Where(c => IsCharacterBasic(c)))
+            {
+                if ((maxOut - numberOfOutputBytes) < 2) 
+                {
+                    return PunyCodeStatic.PunyCodeOperationStatus.PunycodeStatusBigOutput;
+                }
+                outBytes[numberOfOutputBytes++] = (byte) c;
+            }
+            return PunyCodeStatic.PunyCodeOperationStatus.PunycodeStatusSuccess;
+        }
 
         public void Dispose()
         {

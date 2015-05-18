@@ -22,7 +22,7 @@ namespace PunyCode
             inputString = Encoding.Unicode.GetString(b);
             var outputLenght = (uint)(PunyCodeStatic.MaxInputStringLenght);
             b = new byte[PunyCodeStatic.MaxInputStringLenght];
-            var status = _punyCodeConverterHelper.PunycodeEncode((uint)inputString.Length, inputString, null, out outputLenght, out b);
+            var status = _punyCodeConverterHelper.PunycodeEncode((uint)inputString.Length, inputString, out outputLenght, out b);
 
             inputString = "";
 

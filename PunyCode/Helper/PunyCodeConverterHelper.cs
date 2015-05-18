@@ -45,35 +45,27 @@ namespace PunyCode.Helper
         /// WsPunyCodePunycodeStatus_BigOutput,  /* Output would exceed the space provided. */
         /// WsPunyCodePunycodeStatus_Overflow    /* Input needs wider integers to process.  */
         /// </returns>
-        public PunyCodeStatic.PunyCodeOperationStatus PunycodeEncode(uint inputLenght, string inputString,
-                                                IList<bool> caseFlagsList,out uint outputLenght,
-                                                out byte[] outBytes )
+        public PunyCodeStatic.PunyCodeOperationStatus PunycodeEncode(
+            uint inputLenght, 
+            string inputString,
+            out uint outputLenght,
+            out byte[] outBytes )
         {
-            uint numberOfBasicCodePoints, 
-                numberOfOutputBytes;
-            outputLenght = PunyCodeStatic.MaxInputStringLenght;
-            outBytes = new byte[PunyCodeStatic.MaxInputStringLenght];
-            /* Initialize the state: */
-
+            
+            outputLenght = PunyCodeStatic.MaxInputStringLenght;            
+            uint numberOfBasicCodePoints,
+                 numberOfOutputBytes;
             var n = (uint)PunyCodeStatic.PunyCodeBootstringParams.PunycodeBootstringInitialN;
             var delta = numberOfOutputBytes = 0;
             var maxOut = outputLenght;
             var bias = (uint)PunyCodeStatic.PunyCodeBootstringParams.PunycodeBootstringInitialBias;
 
-            uint j;
-            /* Handle the basic code points: */
-            for (j = 0;  j < inputLenght;  ++j) {
-                if (!_punyCodeBaseCodeHelper.IsCharacterBasic(inputString[(int)j])) continue;
-                if ((maxOut - numberOfOutputBytes) < 2) 
-                {
-                    return PunyCodeStatic.PunyCodeOperationStatus.PunycodeStatusBigOutput;
-                }
-                outBytes[numberOfOutputBytes++] = (byte)((caseFlagsList != null) 
-                    ? _punyCodeBaseCodeHelper.GetEncodedBasicCodeToAscii(inputString[(int)j], caseFlagsList[(int)j]) 
-                    : inputString[(int)j]);
-                /* else if (input[j] < n) return punycode_bad_input; */
-            /* (not needed for Punycode with unsigned code points) */
-            }
+            _punyCodeBaseCodeHelper.AddAllAsciiCharsToOutBytes(
+                inputString, 
+                inputLenght,
+                maxOut, 
+                out numberOfOutputBytes,
+                out outBytes);
 
             var numberOfHandledBasicCodePoints = numberOfBasicCodePoints = numberOfOutputBytes;
 
@@ -90,6 +82,7 @@ namespace PunyCode.Helper
             /* handled already.  Find the next larger one: */
 
                 uint m;
+                uint j;
                 for (m = PunyCodeStatic.MaxUint, j = 0;  j < inputLenght;  ++j) {
               /* if (basic(input[j])) continue; */
               /* (not needed for Punycode) */
@@ -128,7 +121,7 @@ namespace PunyCode.Helper
                     q = (q - t) / ((uint)PunyCodeStatic.PunyCodeBootstringParams.PunycodeBootstringBase - t);
                 }
 
-                outBytes[numberOfOutputBytes++] = (byte)_punyCodeBaseCodeHelper.GetEncodedBasicCodeToAscii(q, (caseFlagsList != null) && caseFlagsList[(int)j]);
+                //outBytes[numberOfOutputBytes++] = (byte)_punyCodeBaseCodeHelper.GetEncodedBasicCodeToAscii(q, (caseFlagsList != null) && caseFlagsList[(int)j]);
                 bias = _punyCodeBaseCodeHelper.Adapt(delta, numberOfHandledBasicCodePoints + 1, numberOfHandledBasicCodePoints == numberOfBasicCodePoints);
                 delta = 0;
                 ++numberOfHandledBasicCodePoints;
