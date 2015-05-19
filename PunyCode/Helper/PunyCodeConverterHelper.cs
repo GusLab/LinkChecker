@@ -45,7 +45,7 @@ namespace PunyCode.Helper
         /// WsPunyCodePunycodeStatus_BigOutput,  /* Output would exceed the space provided. */
         /// WsPunyCodePunycodeStatus_Overflow    /* Input needs wider integers to process.  */
         /// </returns>
-        public PunyCodeStatic.PunyCodeOperationStatus PunycodeEncode(
+        public PunyCodeStatic.OperationStatus PunycodeEncode(
             uint inputLenght, 
             string inputString,
             out uint outputLenght,
@@ -55,25 +55,22 @@ namespace PunyCode.Helper
             outputLenght = PunyCodeStatic.MaxInputStringLenght;            
             uint numberOfBasicCodePoints,
                  numberOfOutputBytes;
-            var n = (uint)PunyCodeStatic.PunyCodeBootstringParams.PunycodeBootstringInitialN;
-            var delta = numberOfOutputBytes = 0;
+            var n = (uint)PunyCodeStatic.BootstringParams.InitialN;
+            uint delta = 0;
             var maxOut = outputLenght;
-            var bias = (uint)PunyCodeStatic.PunyCodeBootstringParams.PunycodeBootstringInitialBias;
+            var bias = (uint)PunyCodeStatic.BootstringParams.InitialBias;
 
-            _punyCodeBaseCodeHelper.AddAllAsciiCharsToOutBytes(
+            if (_punyCodeBaseCodeHelper.AddAllAsciiCharsToOutBytes(
                 inputString, 
                 inputLenght,
                 maxOut, 
                 out numberOfOutputBytes,
-                out outBytes);
+                out outBytes) != PunyCodeStatic.OperationStatus.Success)
+                return PunyCodeStatic.OperationStatus.BigOutput;
 
             var numberOfHandledBasicCodePoints = numberOfBasicCodePoints = numberOfOutputBytes;
 
-            /* h is the number of code points that have been handled, b is the  */
-            /* number of basic code points, and out is the number of characters */
-            /* that have been output.                                           */
-
-            if (numberOfBasicCodePoints > 0) outBytes[numberOfOutputBytes++] = (byte)PunyCodeStatic.PunyCodeBootstringParams.PunycodeBootstringDelimiter;
+            if (numberOfBasicCodePoints > 0) outBytes[numberOfOutputBytes++] = (byte)PunyCodeStatic.BootstringParams.Delimiter;
 
             /* Main encoding loop: */
 
@@ -92,14 +89,14 @@ namespace PunyCode.Helper
             /* Increase delta enough to advance the decoder's    */
             /* <n,i> state to <m,0>, but guard against overflow: */
 
-            if (m - n > (PunyCodeStatic.MaxUint - delta) / (numberOfHandledBasicCodePoints + 1)) return PunyCodeStatic.PunyCodeOperationStatus.PunycodeStatusOverflow;
+            if (m - n > (PunyCodeStatic.MaxUint - delta) / (numberOfHandledBasicCodePoints + 1)) return PunyCodeStatic.OperationStatus.Overflow;
             delta += (m - n) * (numberOfHandledBasicCodePoints + 1);
             n = m;
 
             for (j = 0;  j < inputLenght;  ++j) {
               /* Punycode does not need to check whether input[j] is basic: */
               if (inputString[(int)j] < n /* || basic(input[j]) */ ) {
-                if (++delta == 0) return PunyCodeStatic.PunyCodeOperationStatus.PunycodeStatusOverflow;
+                if (++delta == 0) return PunyCodeStatic.OperationStatus.Overflow;
               }
 
                 if (inputString[(int) j] != n) continue;
@@ -107,18 +104,18 @@ namespace PunyCode.Helper
 
                 uint q;
                 uint k;
-                for (q = delta, k = (uint)PunyCodeStatic.PunyCodeBootstringParams.PunycodeBootstringBase;  
+                for (q = delta, k = (uint)PunyCodeStatic.BootstringParams.Base;  
                     ;  
-                    k += (uint)PunyCodeStatic.PunyCodeBootstringParams.PunycodeBootstringBase) {
-                    if (numberOfOutputBytes >= maxOut) return PunyCodeStatic.PunyCodeOperationStatus.PunycodeStatusBigOutput;
-                    var t = k <= bias /* + tmin */ ? (uint)PunyCodeStatic.PunyCodeBootstringParams.PunycodeBootstringTmin :     /* +tmin not needed */
-                        k >= bias + (uint)PunyCodeStatic.PunyCodeBootstringParams.PunycodeBootstringTmax 
-                        ? (uint)PunyCodeStatic.PunyCodeBootstringParams.PunycodeBootstringTmax 
+                    k += (uint)PunyCodeStatic.BootstringParams.Base) {
+                    if (numberOfOutputBytes >= maxOut) return PunyCodeStatic.OperationStatus.BigOutput;
+                    var t = k <= bias /* + tmin */ ? (uint)PunyCodeStatic.BootstringParams.Tmin :     /* +tmin not needed */
+                        k >= bias + (uint)PunyCodeStatic.BootstringParams.Tmax 
+                        ? (uint)PunyCodeStatic.BootstringParams.Tmax 
                         : k - bias;
                     if (q < t) break;
                     outBytes[numberOfOutputBytes++] = (byte)_punyCodeBaseCodeHelper.GetEncodedBasicCodeToAscii(t + (q - t) 
-                        % ((uint)PunyCodeStatic.PunyCodeBootstringParams.PunycodeBootstringBase - t), false);
-                    q = (q - t) / ((uint)PunyCodeStatic.PunyCodeBootstringParams.PunycodeBootstringBase - t);
+                        % ((uint)PunyCodeStatic.BootstringParams.Base - t), false);
+                    q = (q - t) / ((uint)PunyCodeStatic.BootstringParams.Base - t);
                 }
 
                 //outBytes[numberOfOutputBytes++] = (byte)_punyCodeBaseCodeHelper.GetEncodedBasicCodeToAscii(q, (caseFlagsList != null) && caseFlagsList[(int)j]);
@@ -132,7 +129,7 @@ namespace PunyCode.Helper
             }
 
             outputLenght = numberOfOutputBytes;
-            return PunyCodeStatic.PunyCodeOperationStatus.PunycodeStatusSuccess;
+            return PunyCodeStatic.OperationStatus.Success;
         }
 
         /// <summary>
@@ -168,7 +165,7 @@ namespace PunyCode.Helper
         /// WsPunyCodePunycodeStatus_BigOutput,  /* Output would exceed the space provided. */
         /// WsPunyCodePunycodeStatus_Overflow    /* Input needs wider integers to process.  */
         /// </returns>
-        public PunyCodeStatic.PunyCodeOperationStatus PunycodeDecode(uint inputLenght,IList<byte> inputBytes,
+        public PunyCodeStatic.OperationStatus PunycodeDecode(uint inputLenght,IList<byte> inputBytes,
                                                 out uint outputLenght,out char[] outChars,
                                                 bool[] caseBools )
         {
@@ -177,11 +174,11 @@ namespace PunyCode.Helper
             outChars = new char[PunyCodeStatic.MaxInputStringLenght];
             /* Initialize the state: */
 
-            var n = (uint)PunyCodeStatic.PunyCodeBootstringParams.PunycodeBootstringInitialN;
+            var n = (uint)PunyCodeStatic.BootstringParams.InitialN;
             uint sout = 0;
             var i = 0;
             var maxOut = outputLenght;
-            var bias = (uint)PunyCodeStatic.PunyCodeBootstringParams.PunycodeBootstringInitialBias;
+            var bias = (uint)PunyCodeStatic.BootstringParams.InitialBias;
 
             /* Handle the basic code points:  Let b be the number of input code */
             /* points before the last delimiter, or 0 if there is none, then    */
@@ -193,7 +190,7 @@ namespace PunyCode.Helper
             }
             if (b > maxOut) 
             {
-                return PunyCodeStatic.PunyCodeOperationStatus.PunycodeStatusBigOutput;
+                return PunyCodeStatic.OperationStatus.BigOutput;
             }
 
             for (j = 0;  j < b;  ++j) 
@@ -204,7 +201,7 @@ namespace PunyCode.Helper
                 }
                 if (!_punyCodeBaseCodeHelper.IsCharacterBasic(inputBytes[(int)j])) 
                 {
-                    return PunyCodeStatic.PunyCodeOperationStatus.PunycodeStatusBadInput;
+                    return PunyCodeStatic.OperationStatus.BadInput;
                 }
 
                 outChars[(int)sout++] = (char)inputBytes[(int)j];
@@ -226,23 +223,23 @@ namespace PunyCode.Helper
                 uint oldi;
                 uint w;
                 uint k;
-                for (oldi = (uint)i, w = 1, k = (uint)PunyCodeStatic.PunyCodeBootstringParams.PunycodeBootstringBase;  
+                for (oldi = (uint)i, w = 1, k = (uint)PunyCodeStatic.BootstringParams.Base;  
                     ;  
-                    k += (uint)PunyCodeStatic.PunyCodeBootstringParams.PunycodeBootstringBase) {
-              if (sin >= inputLenght) return PunyCodeStatic.PunyCodeOperationStatus.PunycodeStatusBadInput;
+                    k += (uint)PunyCodeStatic.BootstringParams.Base) {
+              if (sin >= inputLenght) return PunyCodeStatic.OperationStatus.BadInput;
               var digit = _punyCodeBaseCodeHelper.GetAlphaNumericValueInBasicCode(inputBytes[(int)sin++]);
-              if (digit >= (uint)PunyCodeStatic.PunyCodeBootstringParams.PunycodeBootstringBase) 
-                  return PunyCodeStatic.PunyCodeOperationStatus.PunycodeStatusBadInput;
-              if (digit > (PunyCodeStatic.MaxUint - i) / w) return PunyCodeStatic.PunyCodeOperationStatus.PunycodeStatusOverflow;
+              if (digit >= (uint)PunyCodeStatic.BootstringParams.Base) 
+                  return PunyCodeStatic.OperationStatus.BadInput;
+              if (digit > (PunyCodeStatic.MaxUint - i) / w) return PunyCodeStatic.OperationStatus.Overflow;
               i += (int)(digit * w);
-              var t = k <= bias /* + tmin */ ? (uint)PunyCodeStatic.PunyCodeBootstringParams.PunycodeBootstringTmin :     /* +tmin not needed */
-                  k >= bias + (uint)PunyCodeStatic.PunyCodeBootstringParams.PunycodeBootstringTmax 
-                  ? (uint)PunyCodeStatic.PunyCodeBootstringParams.PunycodeBootstringTmax 
+              var t = k <= bias /* + tmin */ ? (uint)PunyCodeStatic.BootstringParams.Tmin :     /* +tmin not needed */
+                  k >= bias + (uint)PunyCodeStatic.BootstringParams.Tmax 
+                  ? (uint)PunyCodeStatic.BootstringParams.Tmax 
                   : k - bias;
               if (digit < t) break;
-              if (w > PunyCodeStatic.MaxUint / ((uint)PunyCodeStatic.PunyCodeBootstringParams.PunycodeBootstringBase - t)) 
-                  return PunyCodeStatic.PunyCodeOperationStatus.PunycodeStatusOverflow;
-              w *= ((uint)PunyCodeStatic.PunyCodeBootstringParams.PunycodeBootstringBase - t);
+              if (w > PunyCodeStatic.MaxUint / ((uint)PunyCodeStatic.BootstringParams.Base - t)) 
+                  return PunyCodeStatic.OperationStatus.Overflow;
+              w *= ((uint)PunyCodeStatic.BootstringParams.Base - t);
             }
 
                 bias = _punyCodeBaseCodeHelper.Adapt((uint)(i - (int)oldi), sout + 1, oldi == 0);
@@ -251,7 +248,7 @@ namespace PunyCode.Helper
             /* incrementing n each time, so we'll fix that now: */
 
             if (i / (sout + 1) > PunyCodeStatic.MaxUint - n) 
-                return PunyCodeStatic.PunyCodeOperationStatus.PunycodeStatusOverflow;
+                return PunyCodeStatic.OperationStatus.Overflow;
             n += (uint)i / (sout + 1);
             i %= (int)(sout + 1);
 
@@ -259,7 +256,7 @@ namespace PunyCode.Helper
 
             /* not needed for Punycode: */
             /* if (decode_digit(n) <= base) return punycode_invalid_input; */
-            if (sout >= maxOut) return PunyCodeStatic.PunyCodeOperationStatus.PunycodeStatusBigOutput;
+            if (sout >= maxOut) return PunyCodeStatic.OperationStatus.BigOutput;
 
             if (caseBools != null) {
                 Array.Copy(caseBools, i, caseBools, i + 1, sout - 1);
@@ -275,7 +272,7 @@ namespace PunyCode.Helper
             }
 
             outputLenght = sout;
-            return PunyCodeStatic.PunyCodeOperationStatus.PunycodeStatusSuccess;
+            return PunyCodeStatic.OperationStatus.Success;
         }
         
         public void Dispose()

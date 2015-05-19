@@ -26,7 +26,7 @@ namespace PunyCode
 
             inputString = "";
 
-            if (status != PunyCodeStatic.PunyCodeOperationStatus.PunycodeStatusSuccess) return inputString.ToLower();
+            if (status != PunyCodeStatic.OperationStatus.Success) return inputString.ToLower();
             for (var i = 0; i < b.Length; i++)
             {
                 if (b[i] >= 16 && b[i] <= 25)
@@ -50,7 +50,7 @@ namespace PunyCode
                 char[] c;
                 var status = _punyCodeConverterHelper.PunycodeDecode((uint)aInput.Length, b, out outputLenght, out c, null);
                 aInput = "";
-                if (status == PunyCodeStatic.PunyCodeOperationStatus.PunycodeStatusSuccess)
+                if (status == PunyCodeStatic.OperationStatus.Success)
                 {
                     aInput = c.Where(t => t != 0).Aggregate(aInput, (current, t) => current + t);
                 }

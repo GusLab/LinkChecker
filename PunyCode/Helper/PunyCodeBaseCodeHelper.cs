@@ -8,18 +8,18 @@ namespace PunyCode.Helper
     {        
         public bool IsCharacterBasic(uint inputCharacter)
         {
-            return (inputCharacter < (uint)PunyCodeStatic.PunyCodeBootstringParams.PunycodeBootstringInitialN);
+            return (inputCharacter < (uint)PunyCodeStatic.BootstringParams.InitialN);
         }
 
         public bool IsCharacterDelimiter(uint inputCharacter)
         {
-            return (inputCharacter == (uint)PunyCodeStatic.PunyCodeBootstringParams.PunycodeBootstringDelimiter);
+            return (inputCharacter == (uint)PunyCodeStatic.BootstringParams.Delimiter);
         }
 
         public uint GetAlphaNumericValueInBasicCode(uint inputCharacter)
         {
             return (inputCharacter - 48 < 10 ? inputCharacter - 22 : inputCharacter - 65 < 26 ? inputCharacter - 65 :
-                    inputCharacter - 97 < 26 ? inputCharacter - 97 : (uint)PunyCodeStatic.PunyCodeBootstringParams.PunycodeBootstringBase);
+                    inputCharacter - 97 < 26 ? inputCharacter - 97 : (uint)PunyCodeStatic.BootstringParams.Base);
         }
 
         public char GetEncodedBasicCodeToAscii(uint inputCharacter, bool isLowerCase)
@@ -46,18 +46,18 @@ namespace PunyCode.Helper
         {
             uint k;
 
-            delta = firstTimeFlag ? delta / (uint)PunyCodeStatic.PunyCodeBootstringParams.PunycodeBootstringDamp : delta >> 1;
+            delta = firstTimeFlag ? delta / (uint)PunyCodeStatic.BootstringParams.Damp : delta >> 1;
             delta += delta / numPoints;
 
-            for (k = 0; delta > (((uint)PunyCodeStatic.PunyCodeBootstringParams.PunycodeBootstringBase - (uint)PunyCodeStatic.PunyCodeBootstringParams.PunycodeBootstringTmin) * (uint)PunyCodeStatic.PunyCodeBootstringParams.PunycodeBootstringTmax) / 2; k += (uint)PunyCodeStatic.PunyCodeBootstringParams.PunycodeBootstringBase)
+            for (k = 0; delta > (((uint)PunyCodeStatic.BootstringParams.Base - (uint)PunyCodeStatic.BootstringParams.Tmin) * (uint)PunyCodeStatic.BootstringParams.Tmax) / 2; k += (uint)PunyCodeStatic.BootstringParams.Base)
             {
-                delta /= (uint)PunyCodeStatic.PunyCodeBootstringParams.PunycodeBootstringBase - (uint)PunyCodeStatic.PunyCodeBootstringParams.PunycodeBootstringTmin;
+                delta /= (uint)PunyCodeStatic.BootstringParams.Base - (uint)PunyCodeStatic.BootstringParams.Tmin;
             }
 
-            return k + ((uint)PunyCodeStatic.PunyCodeBootstringParams.PunycodeBootstringBase - (uint)PunyCodeStatic.PunyCodeBootstringParams.PunycodeBootstringTmin + 1) * delta / (delta + (uint)PunyCodeStatic.PunyCodeBootstringParams.PunycodeBootstringSkew);
+            return k + ((uint)PunyCodeStatic.BootstringParams.Base - (uint)PunyCodeStatic.BootstringParams.Tmin + 1) * delta / (delta + (uint)PunyCodeStatic.BootstringParams.Skew);
         }
 
-        public PunyCodeStatic.PunyCodeOperationStatus AddAllAsciiCharsToOutBytes(
+        public PunyCodeStatic.OperationStatus AddAllAsciiCharsToOutBytes(
             string inputString,
             uint inputLenght,
             uint maxOut,
@@ -73,11 +73,11 @@ namespace PunyCode.Helper
             {
                 if ((maxOut - numberOfOutputBytes) < 2) 
                 {
-                    return PunyCodeStatic.PunyCodeOperationStatus.PunycodeStatusBigOutput;
+                    return PunyCodeStatic.OperationStatus.BigOutput;
                 }
                 outBytes[numberOfOutputBytes++] = (byte) c;
             }
-            return PunyCodeStatic.PunyCodeOperationStatus.PunycodeStatusSuccess;
+            return PunyCodeStatic.OperationStatus.Success;
         }
 
         public void Dispose()

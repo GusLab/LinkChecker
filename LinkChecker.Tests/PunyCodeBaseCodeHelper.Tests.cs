@@ -1,4 +1,7 @@
-﻿using NUnit.Framework;
+﻿using System;
+using System.Runtime.InteropServices.ComTypes;
+using NUnit.Framework;
+using PunyCode.Helper;
 
 namespace Punycode.Tests
 {
@@ -333,6 +336,28 @@ namespace Punycode.Tests
             const uint expectedResult = 67;
 
             Assert.AreEqual(expectedResult, actualResult);
+        }
+
+        [Test]
+        public void AddAllAsciiCharsToOutBytesReturnsBigOutput()
+        {
+            var punycodeImp = new PunyCode.Helper.PunyCodeBaseCodeHelper();
+
+            const string inputString = "abcdefghijklmnopqrstuvwxyz0123456789-";
+            uint numberOfOutPutBytes;
+            byte[] outBytes;
+            var actualResult = punycodeImp.AddAllAsciiCharsToOutBytes(inputString, (uint)inputString.Length, PunyCodeStatic.MaxInputStringLenght,
+                out numberOfOutPutBytes, out outBytes);
+            const PunyCodeStatic.OperationStatus expectedResult = PunyCodeStatic.OperationStatus.Success;
+            var expectedNumberOfOutBytes = inputString.Length;
+            var expectedOutBytes = new byte[PunyCodeStatic.MaxInputStringLenght];
+            var existingOutBytes = System.Text.Encoding.ASCII.GetBytes(inputString);
+            Buffer.BlockCopy(existingOutBytes, 0, expectedOutBytes, 0, expectedNumberOfOutBytes);
+
+            Assert.AreEqual(expectedResult, actualResult);
+            Assert.AreEqual(expectedNumberOfOutBytes,numberOfOutPutBytes);
+            Assert.AreEqual(outBytes.Length, expectedOutBytes.Length);
+            Assert.AreSame(expectedOutBytes,outBytes);
         }
     }
 }
