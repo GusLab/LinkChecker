@@ -5,7 +5,7 @@ using PunyCode.Helper;
 
 namespace PunyCode
 {
-    public class PunyCodeConverterImpl : IPunycodeConverter, IDisposable
+    public sealed class PunyCodeConverterImpl : IPunycodeConverter, IDisposable
     {
         private PunyCodeConverterHelper _punyCodeConverterHelper;
         private bool _disposed;
@@ -22,11 +22,11 @@ namespace PunyCode
             inputString = Encoding.Unicode.GetString(b);
             var outputLenght = (uint)(PunyCodeStatic.MaxInputStringLenght);
             b = new byte[PunyCodeStatic.MaxInputStringLenght];
-            var status = _punyCodeConverterHelper.PunycodeEncode((uint)inputString.Length, inputString, null, out outputLenght, out b);
+            var status = _punyCodeConverterHelper.PunycodeEncode((uint)inputString.Length, inputString, out outputLenght, out b);
 
             inputString = "";
 
-            if (status != PunyCodeStatic.PunyCodeOperationStatus.PunycodeStatusSuccess) return inputString.ToLower();
+            if (status != PunyCodeStatic.OperationStatus.Success) return inputString.ToLower();
             for (var i = 0; i < b.Length; i++)
             {
                 if (b[i] >= 16 && b[i] <= 25)
@@ -50,7 +50,7 @@ namespace PunyCode
                 char[] c;
                 var status = _punyCodeConverterHelper.PunycodeDecode((uint)aInput.Length, b, out outputLenght, out c, null);
                 aInput = "";
-                if (status == PunyCodeStatic.PunyCodeOperationStatus.PunycodeStatusSuccess)
+                if (status == PunyCodeStatic.OperationStatus.Success)
                 {
                     aInput = c.Where(t => t != 0).Aggregate(aInput, (current, t) => current + t);
                 }
@@ -69,7 +69,7 @@ namespace PunyCode
             GC.SuppressFinalize(this);
         }
 
-        protected virtual void Dispose(bool disposing)
+        void Dispose(bool disposing)
         {
             if (_disposed)
                 return;

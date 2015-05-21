@@ -1,4 +1,8 @@
-﻿using NUnit.Framework;
+﻿using System;
+using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
+using NUnit.Framework;
+using PunyCode.Helper;
 
 namespace Punycode.Tests
 {
@@ -333,6 +337,84 @@ namespace Punycode.Tests
             const uint expectedResult = 67;
 
             Assert.AreEqual(expectedResult, actualResult);
+        }
+
+        [Test]
+        public void AddAllAsciiCharsToOutBytesReturnsSuccess()
+        {
+            var punycodeImp = new PunyCode.Helper.PunyCodeBaseCodeHelper();
+
+            const string inputString = "abcdefghijklmnopqrstuvwxyz0123456789-";
+            uint numberOfOutPutBytes;
+            byte[] outBytes;
+            var actualResult = punycodeImp.AddAllAsciiCharsToOutBytes(inputString, PunyCodeStatic.MaxInputStringLenght,
+                out numberOfOutPutBytes, out outBytes);
+            const PunyCodeStatic.OperationStatus expectedResult = PunyCodeStatic.OperationStatus.Success;
+            var expectedNumberOfOutBytes = inputString.Length;
+            var expectedOutBytes = new byte[PunyCodeStatic.MaxInputStringLenght];
+            var existingOutBytes = System.Text.Encoding.ASCII.GetBytes(inputString);
+            Buffer.BlockCopy(existingOutBytes, 0, expectedOutBytes, 0, expectedNumberOfOutBytes);
+
+            Assert.AreEqual(expectedResult, actualResult);
+            Assert.AreEqual(expectedNumberOfOutBytes,numberOfOutPutBytes);
+            Assert.AreEqual(outBytes.Length, expectedOutBytes.Length);
+            var isEqual = outBytes.SequenceEqual(expectedOutBytes);
+
+            Assert.IsTrue(isEqual);
+        }
+
+        [Test]
+        public void AddAllAsciiCharsToOutBytesWrongInput()
+        {
+            var punycodeImp = new PunyCode.Helper.PunyCodeBaseCodeHelper();
+
+            const string inputString = " ";
+            uint numberOfOutPutBytes;
+            byte[] outBytes;
+            var actualResult = punycodeImp.AddAllAsciiCharsToOutBytes(inputString, 4000000000,
+                out numberOfOutPutBytes, out outBytes);
+            const PunyCodeStatic.OperationStatus expectedResult = PunyCodeStatic.OperationStatus.Success;
+
+            Assert.AreEqual(expectedResult, actualResult);
+        }
+
+        [Test]
+        public void AddAllAsciiCharsToOutBytesReturnsBigOutput()
+        {
+            var punycodeImp = new PunyCode.Helper.PunyCodeBaseCodeHelper();
+
+            const string inputString = "abcdefghijklmnopqrstuvwxyz0123456789-";
+            uint numberOfOutPutBytes;
+            byte[] outBytes;
+            var actualResult = punycodeImp.AddAllAsciiCharsToOutBytes(inputString, 2,
+                out numberOfOutPutBytes, out outBytes);
+            const PunyCodeStatic.OperationStatus expectedResult = PunyCodeStatic.OperationStatus.BigOutput;
+            Assert.AreEqual(expectedResult, actualResult);
+        }
+
+        [Test]
+        public void AddAllAsciiCharsToOutBytesReturnsSuccessOnRealUnicode()
+        {
+            var punycodeImp = new PunyCode.Helper.PunyCodeBaseCodeHelper();
+
+            const string inputString = "aНа берегу пустынныхb- волнვეპხის ტყაოსანი შოთაc რუსთაველიमी काच खाऊ शकतो, मला ते दुखत नाही.e-";
+            uint numberOfOutPutBytes;
+            byte[] outBytes;
+            var actualResult = punycodeImp.AddAllAsciiCharsToOutBytes(inputString, (uint)inputString.Length+2,
+                out numberOfOutPutBytes, out outBytes);
+            const PunyCodeStatic.OperationStatus expectedResult = PunyCodeStatic.OperationStatus.Success;
+            var expectedString = "a  b-   c    ,    .e-";
+            var expectedNumberOfOutBytes = expectedString.Length;
+            var expectedOutBytes = new byte[PunyCodeStatic.MaxInputStringLenght];
+            var existingOutBytes = System.Text.Encoding.ASCII.GetBytes(expectedString);
+            Buffer.BlockCopy(existingOutBytes, 0, expectedOutBytes, 0, expectedNumberOfOutBytes);
+            var isEqual = outBytes.SequenceEqual(expectedOutBytes);
+
+            Assert.AreEqual(expectedResult, actualResult);
+            Assert.AreEqual(expectedNumberOfOutBytes, numberOfOutPutBytes);
+            Assert.AreEqual(outBytes.Length, expectedOutBytes.Length);            
+
+            Assert.IsTrue(isEqual);
         }
     }
 }
