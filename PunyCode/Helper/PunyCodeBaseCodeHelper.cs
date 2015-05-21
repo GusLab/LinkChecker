@@ -59,7 +59,6 @@ namespace PunyCode.Helper
 
         public PunyCodeStatic.OperationStatus AddAllAsciiCharsToOutBytes(
             string inputString,
-            uint inputLenght,
             uint maxOut,
             out uint numberOfOutputBytes,
             out byte[] outBytes            

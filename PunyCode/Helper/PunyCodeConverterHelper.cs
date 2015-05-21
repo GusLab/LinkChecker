@@ -61,8 +61,7 @@ namespace PunyCode.Helper
             var bias = (uint)PunyCodeStatic.BootstringParams.InitialBias;
 
             if (_punyCodeBaseCodeHelper.AddAllAsciiCharsToOutBytes(
-                inputString, 
-                inputLenght,
+                inputString,
                 maxOut, 
                 out numberOfOutputBytes,
                 out outBytes) != PunyCodeStatic.OperationStatus.Success)
